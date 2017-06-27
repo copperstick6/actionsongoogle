@@ -26,13 +26,16 @@ exports.silicon = (req, res) => {
 
   function hereIntent(app){
     let locPermission = app.SupportedPermissions.DEVICE_PRECISE_LOCATION
+    app.data.permission = locPermission
     app.askForPermissions('To address you by name and know your location',[locPermission])
   }
 
   function gotLoc(app){
-    if(app.isPermissionGranted()){
-      let deviceCoordinates = app.getDeviceLocation().coordinates;
-      app.ask("Your coordinates are: Latitude: " + deviceCoordinates.Latitude + "Longitude: " + deviceCoordinates.Longitude)
+    if(app.isPermissionGranted() === true){
+      const deviceCoordinates = app.getDeviceLocation().coordinates;
+      let lat = deviceCoordinates.latitude
+      let long = deviceCoordinates.longitude
+      app.tell("Your current latitude is: " + lat + " and your current longitude is: " + long + ".")
     }
     else{
       app.ask('Permission to access current location denied. Please either try again or utilize the other methods')
